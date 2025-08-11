@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Wardrobe</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="digitalWardrobe.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <img src="./images/logo.png" alt="MatchMuse logo" class="brand-mark">
+        <span class="brand-name">MatchMuse</span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav">
+        <span class="sr-only">Toggle navigation</span>☰
+      </button>
+
+      <nav id="nav" class="nav">
+        <a href="#explore">Explore</a>
+        <a href="#about">About</a>
+        <a href="#technology">Technology</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="home" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Design Your Outfits Using<br><span class="accent">Machine Learning Software</span></h1>
+        <p>MatchMuse analyzes color, style, and context to build outfits from the clothes you already own.</p>
+        <button id="uploadButton" class="btn btn-primary">Start Designing Now</button>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      </div>
+      <div class="hero-art">
+        <!-- put your “homepage right image” here -->
+        <img src="./images/hero-right.png" alt="Closet color matching illustration" />
+      </div>
+    </div>
+  </main>
+
+  <!-- Explore (blank canvas for you) -->
+  <section id="explore" class="section">
+    <div class="container">
+      <h2>Learn how to design outfits with our color matching software</h2>
+      <!-- add demo UI here -->
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section alt">
+    <div class="container narrow">
+      <h2>About Us</h2>
+      <div class="prose overflow-panel" data-overflow>
+        <p>At MatchMuse, we believe that your closet should feel less like chaos and more like a curated gallery of self-expression. Founded with the vision of simplifying personal style, MatchMuse uses cutting-edge machine learning algorithms to help you match and combine outfits based on color harmony, contrast theory, and personal preference.</p>
+        <p>What started as a small side project between a data scientist and a fashion enthusiast has grown into a tool that empowers people to rediscover the potential of the clothes they already own. Our mission is to take the guesswork out of getting dressed. No more morning stress, no more forgotten garments tucked in the back — just smart, simple, style-forward suggestions that actually work for you.</p>
+        <p>Using your existing wardrobe, MatchMuse analyzes color palettes, fabric textures, and seasonal combinations to generate stylish outfit pairings that align with your aesthetic. Whether you're dressing for a casual brunch, a high-stakes presentation, or just running errands, our AI understands what looks good — and what feels good.</p>
+        <p>We’re not just a styling tool — we’re a commitment to sustainable fashion. By helping users make better use of what they already own, we reduce the temptation to overconsume. Every outfit recommendation you see is a small step toward mindful fashion and conscious living.</p>
+        <p>MatchMuse is powered by a powerful color engine trained on thousands of professional stylist pairings, art theory models, and contemporary fashion trends. We take into account your skin tone preferences, color temperature biases, and the emotional resonance of colors to give you truly personalized results. Our interface is designed to be clean, inspiring, and easy to use — with one-tap outfit suggestions and drag-and-drop closet organization.</p>
+        <p>We're passionate about building a platform that celebrates individuality. Fashion isn't about following trends — it’s about discovering what makes you feel most like you. Our intelligent matching system doesn’t dictate what you should wear — it amplifies your own style voice by showing you possibilities you might not have seen before.</p>
+        <p>Thank you for being part of the MatchMuse journey. Together, we’re turning daily outfit decisions into moments of confidence, creativity, and self-care.</p>
+      </div>
+      <!--<button class="btn btn-outline" data-scroll-to-end="#about">Continue Reading</button>-->
+    </div>
+  </section>
+
+  <!-- Technology -->
+  <section id="technology" class="section">
+    <div class="container">
+      <h2>Technology</h2>
+      <div class="tech-grid">
+        <article class="tech-card">
+          <img src="./images/intelligent-color-matching.png" alt="" class="tech-icon">
+          <h3>Intelligent Color Matching</h3>
+          <p>Our Color Harmony Engine analyzes hue, saturation, warmth, and contrast across your wardrobe.</p>
+        </article>
+        <article class="tech-card">
+          <img src="./images/ml-meets-fashion.png" alt="" class="tech-icon">
+          <h3>Machine Learning Meets Fashion</h3>
+          <p>Recommendations improve with use, learning your taste while surfacing new combos.</p>
+        </article>
+        <article class="tech-card">
+          <img src="./images/adaptive-personalization.png" alt="" class="tech-icon">
+          <h3>Adaptive Personalization</h3>
+          <p>Tailors suggestions to your preferences, season, and context.</p>
+        </article>
+        <article class="tech-card">
+          <img src="./images/smart-recognition.png" alt="" class="tech-icon">
+          <h3>Smart Recognition</h3>
+          <p>Upload a photo; we detect color families and garment type automatically.</p>
+        </article>
+        <article class="tech-card">
+          <img src="./images/seamless-secure.png" alt="" class="tech-icon">
+          <h3>Seamless &amp; Secure</h3>
+          <p>Fast, responsive, and privacy-minded across devices.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section alt">
+    <div class="container narrow">
+      <div class="faq-header">
+        <h2>FAQs</h2>
+        <!--<a class="btn btn-primary" href="#explore">See it in Action</a>-->
+      </div>
+
+      <div class="accordion" data-accordion>
+        <!-- item -->
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false" aria-controls="p1" id="t1">
+            What is MatchMuse?
+          </button>
+          <div id="p1" role="region" aria-labelledby="t1" class="acc-panel" hidden>
+            <p>MatchMuse is a smart styling assistant that helps you create outfits from clothes you already own. It uses machine learning to analyze colors, styles, and combinations — giving you daily suggestions based on your closet.</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false" aria-controls="p2" id="t2">
+            How does the color matching work?
+          </button>
+          <div id="p2" role="region" aria-labelledby="t2" class="acc-panel" hidden>
+            <p>Our AI uses a color harmony engine inspired by art and fashion theory. It detects dominant hues, temperature, and contrast from your clothing photos, and recommends combinations that work well — whether you like subtle tones or bold contrasts.</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false" aria-controls="p3" id="t3">
+            Do I have to take pictures of all my clothes?
+          </button>
+          <div id="p3" role="region" aria-labelledby="t3" class="acc-panel" hidden>
+            <p>You can! Just snap a quick photo of each item, and MatchMuse will automatically detect the color, category (e.g., top, bottom, outerwear), and suggest matches. The more you add, the smarter your recommendations become.</p>
+          </div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-trigger" aria-expanded="false" aria-controls="p4" id="t4">
+            Is my data safe?
+          </button>
+          <div id="p4" role="region" aria-labelledby="t4" class="acc-panel" hidden>
+            <p>Yes. Your photos and closet data are securely stored and never shared. We take privacy seriously and only use your data to provide personalized suggestions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+    <!-- Example of a fixed CTA bar over a scrollable page -->
+<section id="cta-section" class="fixed-cta-section">
+    <div class="container narrow">
+        <div class="btn-header" style="text-align: center; color: var(--pink);">
+                <h4>SEE IT IN ACTION!</h4>
+        </div>
+        <div class="fixed-cta" data-fixed-cta>
+            <button class="btn btn-primary">Start Designing Now</button>
+        </div>
+    </div>
+  </section>
+  <script src="src/main.js" defer></script>
+</body>
+</html>
