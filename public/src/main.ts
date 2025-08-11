@@ -2,16 +2,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   const uploadButton = document.getElementById('uploadButton') as HTMLButtonElement | null;
   const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+  const uploadButtonBottomPage = document.getElementById('uploadButtonBottomPage') as HTMLButtonElement | null;
 
-  if (!uploadButton || !fileInput) {
+  if (!uploadButton || !fileInput || !uploadButtonBottomPage) {
     console.error('uploadButton or fileInput not found in DOM');
     return;
   }
 
   // If inside a <form>, avoid accidental submit
   uploadButton.type = 'button';
+  uploadButtonBottomPage.type = 'button';
 
   uploadButton.addEventListener('click', () => fileInput.click());
+  uploadButtonBottomPage.addEventListener('click', () => fileInput.click());
 
   fileInput.addEventListener('change', async () => {
     const files = fileInput.files;

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Wardrobe</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="digitalWardrobe.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <img src="./images/logo.png" alt="MatchMuse logo" class="brand-mark">
+        <span class="brand-name">MatchMuse</span>
+      </a>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav">
+        <span class="sr-only">Toggle navigation</span>☰
+      </button>
+
+      <nav id="nav" class="nav">
+        <a href="#explore">Explore</a>
+        <a href="#about">About</a>
+        <a href="#technology">Technology</a>
+        <a href="#faq">FAQ</a>
+        <a href="./gallery.html">Images</a>
+      </nav>
+    </div>
+  </header>
+
+<!-- Gallery -->
+<h1>Uploaded Images</h1>
+    <div id="gallery"></div>
+<script src="../src/gallery.js" defer></script>
+</body>
+</html>

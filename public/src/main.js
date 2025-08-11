@@ -39,13 +39,16 @@ var _this = this;
 document.addEventListener('DOMContentLoaded', function () {
     var uploadButton = document.getElementById('uploadButton');
     var fileInput = document.getElementById('fileInput');
-    if (!uploadButton || !fileInput) {
+    var uploadButtonBottomPage = document.getElementById('uploadButtonBottomPage');
+    if (!uploadButton || !fileInput || !uploadButtonBottomPage) {
         console.error('uploadButton or fileInput not found in DOM');
         return;
     }
     // If inside a <form>, avoid accidental submit
     uploadButton.type = 'button';
+    uploadButtonBottomPage.type = 'button';
     uploadButton.addEventListener('click', function () { return fileInput.click(); });
+    uploadButtonBottomPage.addEventListener('click', function () { return fileInput.click(); });
     fileInput.addEventListener('change', function () { return __awaiter(_this, void 0, void 0, function () {
         var files, formData, i, file, res, msg, err_1;
         return __generator(this, function (_a) {

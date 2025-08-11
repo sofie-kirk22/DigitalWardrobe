@@ -31,4 +31,14 @@ app.post('/upload', upload.array('images'), (req, res) => {
   res.send('Images saved successfully!');
 });
 
+// Serve uploaded images
+app.use('/uploads', express.static(uploadPath)); // serve files in /uploads
+
+app.get('/api/images', (req, res) => {
+  fs.readdir(uploadPath, (err, files) => {
+    if (err) return res.status(500).json({ error: 'Error reading uploads' });
+    res.json(files); // ["file1.jpg","file2.png",...]
+  });
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
