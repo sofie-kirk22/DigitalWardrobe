@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/sofie-kirk22/DigitalWardrobe#readme",
   "dependencies": {
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.0.0",
     "express": "^5.1.0",
     "multer": "^2.0.2"
   }

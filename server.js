@@ -1,9 +1,16 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs'); 
 
 const app = express();
 const PORT = 3000;
+
+// Ensure the upload directory exists
+const uploadPath = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath);
+}
 
 // Set storage location & file name
 const storage = multer.diskStorage({
@@ -20,8 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle uploads
 app.post('/upload', upload.array('images'), (req, res) => {
-  console.log('Req is: ', req);
-  console.log('Res is: ', res);  
   console.log('Files uploaded:', req.files);
   res.send('Images saved successfully!');
 });
