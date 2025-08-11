@@ -10,17 +10,17 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-    "target": "esnext",
-    "types": [],
+    "target": "ES2017",
     // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
+    "lib": ["ES2017", "DOM", "ES2015.Iterable"],
+    "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+    "downlevelIteration": true,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,

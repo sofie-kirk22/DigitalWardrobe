@@ -1,12 +1,41 @@
-//Upload image button functionality
-const uploadButton = document.getElementById('uploadButton');
-const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+// Upload image button functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const uploadButton = document.getElementById('uploadButton') as HTMLButtonElement | null;
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
 
-if (uploadButton && fileInput) {
-  uploadButton.addEventListener('click', () => {
-    fileInput.click();
+  if (!uploadButton || !fileInput) {
+    console.error('uploadButton or fileInput not found in DOM');
+    return;
+  }
+
+  // If inside a <form>, avoid accidental submit
+  uploadButton.type = 'button';
+
+  uploadButton.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', async () => {
+    const files = fileInput.files;
+    if (!files?.length) return;
+
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file) formData.append('images', file);
+    }
+
+    try {
+      const res = await fetch('/upload', { method: 'POST', body: formData });
+      if (!res.ok) {
+        console.error('Upload failed:', res.status, res.statusText);
+        return;
+        }
+      const msg = await res.text();
+      console.log('Upload success:', msg);
+    } catch (err) {
+      console.error('Network error while uploading:', err);
+    }
   });
-}
+});
 
 // Smooth-scroll for in-page anchor links
 document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {

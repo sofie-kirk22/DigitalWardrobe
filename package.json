@@ -1,5 +1,29 @@
 {
   "devDependencies": {
+    "@types/node": "^24.2.1",
     "typescript": "^5.9.2"
+  },
+  "name": "digitalwardrobe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sofie-kirk22/DigitalWardrobe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sofie-kirk22/DigitalWardrobe/issues"
+  },
+  "homepage": "https://github.com/sofie-kirk22/DigitalWardrobe#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
   }
 }
