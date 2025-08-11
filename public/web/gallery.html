@@ -12,7 +12,7 @@
   <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#home" class="brand">
+      <a href="./digitalWardrobe.html#home" class="brand">
         <img src="./images/logo.png" alt="MatchMuse logo" class="brand-mark">
         <span class="brand-name">MatchMuse</span>
       </a>
@@ -22,18 +22,60 @@
       </button>
 
       <nav id="nav" class="nav">
-        <a href="#explore">Explore</a>
-        <a href="#about">About</a>
-        <a href="#technology">Technology</a>
-        <a href="#faq">FAQ</a>
+        <a href="./digitalWardrobe.html#explore">Explore</a>
+        <a href="./digitalWardrobe.html#about">About</a>
+        <a href="./digitalWardrobe.html#technology">Technology</a>
+        <a href="./digitalWardrobe.html#faq">FAQ</a>
         <a href="./gallery.html">Images</a>
       </nav>
     </div>
   </header>
 
-<!-- Gallery -->
-<h1>Uploaded Images</h1>
-    <div id="gallery"></div>
+<input type="file" id="fileInput" accept="image/*" style="display: none;">
+<!-- Tops -->
+ <section id="topImages" class="section">
+    <div class="container">
+      <h2>Tops Images</h2>
+      <button id="uploadButtonTops" class="btn btn-primary">Start Designing Now</button>
+      <div id="tops"></div>
+    </div>
+</section> 
+
+<!-- Bottoms -->
+<section id="bottomImages" class="section">
+    <div class="container">
+      <h2>Bottoms Images</h2>
+      <button id="uploadButtonBottoms" class="btn btn-primary">Start Designing Now</button>
+      <div id="bottoms"></div>
+    </div>
+</section> 
+
+<!-- Shoes -->
+<section id="shoeImages" class="section">
+    <div class="container">
+      <h2>Shoes Images</h2>
+      <button id="uploadButtonShoes" class="btn btn-primary">Start Designing Now</button>
+      <div id="shoes"></div>
+    </div>
+</section> 
+
+<!-- Accessories -->
+<section id="accessorieImages" class="section">
+    <div class="container">
+      <h2>Accessories Images</h2>
+      <button id="uploadButtonAccessories" class="btn btn-primary">Start Designing Now</button>
+      <div id="accessories"></div>
+    </div>
+</section> 
+
+<!-- Outerwear -->
+<section id="outerwearImages" class="section">
+    <div class="container">
+      <h2>Outerwear Images</h2>
+      <button id="uploadButtonOuterwear" class="btn btn-primary">Start Designing Now</button>
+      <div id="outerwear"></div>
+    </div>
+</section> 
 <script src="../src/gallery.js" defer></script>
 </body>
 </html>

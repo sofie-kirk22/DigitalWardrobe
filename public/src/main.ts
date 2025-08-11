@@ -1,3 +1,4 @@
+/*
 // Upload image button functionality
 document.addEventListener('DOMContentLoaded', () => {
   const uploadButton = document.getElementById('uploadButton') as HTMLButtonElement | null;
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
+*/
 // Smooth-scroll for in-page anchor links
 document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
