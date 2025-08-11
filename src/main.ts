@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch('/upload', { method: 'POST', body: formData });
+      const res = await fetch('http://localhost:3000/upload', { method: 'POST', body: formData.get('images')});
       if (!res.ok) {
         console.error('Upload failed:', res.status, res.statusText);
         return;

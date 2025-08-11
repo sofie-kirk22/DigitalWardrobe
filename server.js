@@ -20,6 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle uploads
 app.post('/upload', upload.array('images'), (req, res) => {
+  console.log('Req is: ', req);
+  console.log('Res is: ', res);  
   console.log('Files uploaded:', req.files);
   res.send('Images saved successfully!');
 });

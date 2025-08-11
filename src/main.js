@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, fetch('/upload', { method: 'POST', body: formData })];
+                    return [4 /*yield*/, fetch('http://localhost:3000/upload', { method: 'POST', body: formData.get('images') })];
                 case 2:
                     res = _a.sent();
                     if (!res.ok) {
