@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Digital Wardrobe</title>
+  <title>Digital Wardrobe – Gallery</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="digitalWardrobe.css" />
@@ -30,61 +30,93 @@
     </div>
   </header>
 
-<input type="file" id="fileInput" accept="image/*" style="display: none;">
-<!-- Tops -->
- <section id="topImages" class="section">
-    <div class="container">
-      <h2>Tops Images</h2>
-      <button id="uploadButtonTops" class="btn btn-primary">Upload Top Image</button>
-      <div id="tops"></div>
-    </div>
-</section> 
-
-<!-- Bottoms -->
-<section id="bottomImages" class="section">
-    <div class="container">
-      <h2>Bottoms Images</h2>
-      <button id="uploadButtonBottoms" class="btn btn-primary">Upload Bottom Image</button>
-      <div id="bottoms"></div>
-    </div>
-</section> 
-
-<!-- Shoes -->
-<section id="shoeImages" class="section">
-    <div class="container">
-      <h2>Shoes Images</h2>
-      <button id="uploadButtonShoes" class="btn btn-primary">Upload Shoes Image</button>
-      <div id="shoes"></div>
-    </div>
-</section> 
-
-<!-- Accessories -->
-<section id="accessorieImages" class="section">
-    <div class="container">
-      <h2>Accessories Images</h2>
-      <button id="uploadButtonAccessories" class="btn btn-primary">Upload Accessorie Image</button>
-      <div id="accessories"></div>
-    </div>
-</section> 
-
-<!-- Outerwear -->
-<section id="outerwearImages" class="section">
-    <div class="container">
-      <h2>Outerwear Images</h2>
-      <button id="uploadButtonOuterwear" class="btn btn-primary">Upload Outerwear Image</button>
-      <div id="outerwear"></div>
-    </div>
-</section>
-
-<!-- Display chatGPT image-->
-<section id="chatGPTImage" class="section">
-    <div class="container">
-      <h2>ChatGPT Image</h2>
-      <button id="makeOutfit" class="btn btn-primary">Generate Outfit</button>
-      <div>
-        <img id="outfit" alt="Generated outfit" style="max-width: 512px;" />
+  <main class="section hero" id="gallery-hero" style="padding-top:96px;">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>Your <span class="accent">Digital Wardrobe</span></h1>
+        <p>Upload items into categories and generate cohesive outfit ideas.</p>
+        <a class="btn btn-outline" href="./digitalWardrobe.html#home">← Back to Home</a>
+      </div>
+      <div class="hero-art">
+        <img src="./images/hero-right.png" alt="Wardrobe hero art" />
       </div>
     </div>
+  </main>
+
+  <input type="file" id="fileInput" accept="image/*" style="display:none;" />
+
+  <!-- Closet cards -->
+  <section class="section" id="closet">
+    <div class="container">
+      <h2>Your Closet</h2>
+
+      <div class="closet-grid">
+        <!-- Tops -->
+        <article class="closet-card">
+          <header class="closet-card__header">
+            <h3>Tops</h3>
+            <button id="uploadButtonTops" class="btn btn-primary">Upload</button>
+          </header>
+          <div id="tops" class="gallery-grid" aria-live="polite"></div>
+        </article>
+
+        <!-- Bottoms -->
+        <article class="closet-card">
+          <header class="closet-card__header">
+            <h3>Bottoms</h3>
+            <button id="uploadButtonBottoms" class="btn btn-primary">Upload</button>
+          </header>
+          <div id="bottoms" class="gallery-grid" aria-live="polite"></div>
+        </article>
+
+        <!-- Shoes -->
+        <article class="closet-card">
+          <header class="closet-card__header">
+            <h3>Shoes</h3>
+            <button id="uploadButtonShoes" class="btn btn-primary">Upload</button>
+          </header>
+          <div id="shoes" class="gallery-grid" aria-live="polite"></div>
+        </article>
+
+        <!-- Accessories -->
+        <article class="closet-card">
+          <header class="closet-card__header">
+            <h3>Accessories</h3>
+            <button id="uploadButtonAccessories" class="btn btn-primary">Upload</button>
+          </header>
+          <div id="accessories" class="gallery-grid" aria-live="polite"></div>
+        </article>
+
+        <!-- Outerwear -->
+        <article class="closet-card">
+          <header class="closet-card__header">
+            <h3>Outerwear</h3>
+            <button id="uploadButtonOuterwear" class="btn btn-primary">Upload</button>
+          </header>
+          <div id="outerwear" class="gallery-grid" aria-live="polite"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Outfit generator -->
+  <section class="section alt" id="generator">
+    <div class="container narrow">
+      <article class="generator-card">
+        <div class="generator-card__header">
+          <h2>Generate an Outfit</h2>
+          <p>We’ll analyze one item from each category and render a cohesive look.</p>
+        </div>
+        <div class="generator-card__actions">
+          <button id="makeOutfit" class="btn btn-primary">Generate Outfit</button>
+        </div>
+        <div class="generator-card__result">
+          <img id="outfit" alt="Generated outfit" />
+          <div id="outfitMeta" class="prose"></div>
+        </div>
+      </article>
+    </div>
+  </section>
 <script src="../src/gallery.js" defer></script>
 </body>
 </html>

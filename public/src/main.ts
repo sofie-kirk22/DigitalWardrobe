@@ -94,4 +94,19 @@ document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
       scope.scrollTo({ top: scope.scrollHeight, behavior: 'smooth' });
     });
   });
+
+  //Display image from chatGPT
+  document.getElementById('homepageGenerate')?.addEventListener('click', async () => {
+    const res = await fetch('http://localhost:3000/api/outfit/generate');
+    const data = await res.json();
+    if (data.imageUrl) {
+      const outfitElement = document.getElementById('homepageOutfitPreview') as HTMLImageElement | null;
+      if (outfitElement) {
+        outfitElement.src = data.imageUrl;
+      }
+      console.log('Attributes used:', data.attributes);
+    } else {
+      alert(data.error || 'Failed to make outfit');
+    }
+  });
   

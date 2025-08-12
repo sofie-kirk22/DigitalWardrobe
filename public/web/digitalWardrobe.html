@@ -46,12 +46,94 @@
     </div>
   </main>
 
-  <!-- Explore (blank canvas for you) -->
-  <section id="explore" class="section">
+ <!-- Explore -->
+  <section id="explore" class="section alt">
     <div class="container">
-      <h2>Learn how to design outfits with our color matching software</h2>
-      <!-- add demo UI here -->
+      <h2>See MatchMuse in Action</h2>
+      <p class="prose" style="color:var(--ink-2);margin-bottom:18px">
+        Upload items to your closet, then generate a cohesive outfit using one piece from each category.
+      </p>
+
+      <!-- Feature highlights -->
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>1. Upload</h3>
+          <p>Add tops, bottoms, shoes, accessories, and outerwear to your digital closet.</p>
+        </article>
+        <article class="feature-card">
+          <h3>2. Analyze</h3>
+          <p>We detect color palettes, patterns, and style hints for smarter pairing.</p>
+        </article>
+        <article class="feature-card">
+          <h3>3. Generate</h3>
+          <p>Create an AI-rendered outfit mockup that ties everything together.</p>
+        </article>
+      </div>
+
+      <!-- Live demo card -->
+      <article class="demo-card">
+        <header class="demo-card__header">
+          <div>
+            <h3 style="margin:0 0 4px">Quick Demo</h3>
+            <p class="prose" style="margin:0;color:var(--ink-2)">Uses one item from each category in your uploads.</p>
+          </div>
+          <div class="demo-card__actions">
+            <a href="./gallery.html" class="btn btn-outline">Open My Closet</a>
+            <button id="homepageGenerate" class="btn btn-primary">Generate Outfit</button>
+          </div>
+        </header>
+
+        <div class="demo-card__body">
+          <figure class="demo-preview">
+            <img id="homepageOutfitPreview" alt="Generated outfit preview" />
+            <figcaption id="homepageStatus" aria-live="polite" class="prose" style="text-align:center;color:var(--ink-2)"></figcaption>
+          </figure>
+
+          <details class="demo-attributes">
+            <summary>See outfit attributes</summary>
+            <pre id="homepageAttributes" class="codepanel" aria-live="polite"></pre>
+          </details>
+        </div>
+      </article>
     </div>
+
+    <!-- Minimal inline JS for the demo -->
+    <script>
+      (function(){
+        const btn = document.getElementById('homepageGenerate');
+        const img = document.getElementById('homepageOutfitPreview');
+        const statusEl = document.getElementById('homepageStatus');
+        const attrsEl = document.getElementById('homepageAttributes');
+
+        if (!btn) return;
+
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          statusEl.textContent = 'Generating outfit...';
+          img.removeAttribute('src');
+          attrsEl.textContent = '';
+
+          const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+          try {
+            const res = await fetch(base + '/api/outfit/generate');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            if (!data.imageUrl) throw new Error(data.error || 'No imageUrl returned');
+
+            img.src = data.imageUrl.startsWith('http') ? data.imageUrl : (base + data.imageUrl);
+            statusEl.textContent = 'Outfit generated ✔';
+            if (data.attributes) {
+              attrsEl.textContent = JSON.stringify(data.attributes, null, 2);
+            }
+          } catch (e) {
+            console.error(e);
+            statusEl.textContent = 'Something went wrong. Please try again.';
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      })();
+    </script>
   </section>
 
   <!-- About -->
