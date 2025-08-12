@@ -192,7 +192,7 @@ async function uploadFiles(fileInput: HTMLInputElement, uploadUrl: string, field
 
   //Display image from chatGPT
   document.getElementById('makeOutfit')?.addEventListener('click', async () => {
-    const res = await fetch('/api/outfit/generate');
+    const res = await fetch('http://localhost:3000/api/outfit/generate');
     const data = await res.json();
     if (data.imageUrl) {
       const outfitElement = document.getElementById('outfit') as HTMLImageElement | null;
