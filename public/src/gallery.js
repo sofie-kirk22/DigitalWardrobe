@@ -34,6 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _a;
+var _this = this;
 // Fetch top images from server and display in gallery
 document.addEventListener('DOMContentLoaded', function () {
     var topsDiv = document.getElementById('tops');
@@ -242,3 +244,28 @@ function uploadFiles(fileInput, uploadUrl, fieldName, category) {
         });
     });
 }
+//Display image from chatGPT
+(_a = document.getElementById('makeOutfit')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
+    var res, data, outfitElement;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, fetch('/api/outfit/generate')];
+            case 1:
+                res = _a.sent();
+                return [4 /*yield*/, res.json()];
+            case 2:
+                data = _a.sent();
+                if (data.imageUrl) {
+                    outfitElement = document.getElementById('outfit');
+                    if (outfitElement) {
+                        outfitElement.src = data.imageUrl;
+                    }
+                    console.log('Attributes used:', data.attributes);
+                }
+                else {
+                    alert(data.error || 'Failed to make outfit');
+                }
+                return [2 /*return*/];
+        }
+    });
+}); });

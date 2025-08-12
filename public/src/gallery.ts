@@ -189,5 +189,20 @@ async function uploadFiles(fileInput: HTMLInputElement, uploadUrl: string, field
       console.error('Network error while uploading:', err);
     }
   }
+
+  //Display image from chatGPT
+  document.getElementById('makeOutfit')?.addEventListener('click', async () => {
+    const res = await fetch('/api/outfit/generate');
+    const data = await res.json();
+    if (data.imageUrl) {
+      const outfitElement = document.getElementById('outfit') as HTMLImageElement | null;
+      if (outfitElement) {
+        outfitElement.src = data.imageUrl;
+      }
+      console.log('Attributes used:', data.attributes);
+    } else {
+      alert(data.error || 'Failed to make outfit');
+    }
+  });
   
   
