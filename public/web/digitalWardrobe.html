@@ -85,7 +85,8 @@
 
         <div class="demo-card__body">
           <figure class="demo-preview">
-            <img id="homepageOutfitPreview" alt="Generated outfit preview" />
+            <div id="homepageSpinner" class="spinner" hidden aria-live="polite" aria-busy="true" aria-label="Generating outfit"></div>
+            <img id="homepageOutfitPreview" alt="Generated outfit preview" hidden />
             <figcaption id="homepageStatus" aria-live="polite" class="prose" style="text-align:center;color:var(--ink-2)"></figcaption>
           </figure>
 
@@ -97,36 +98,53 @@
       </article>
     </div>
 
-    <!-- Minimal inline JS for the demo -->
+    <!-- Closet JS -->
     <script>
       (function(){
         const btn = document.getElementById('homepageGenerate');
         const img = document.getElementById('homepageOutfitPreview');
         const statusEl = document.getElementById('homepageStatus');
         const attrsEl = document.getElementById('homepageAttributes');
-
-        if (!btn) return;
-
+        const spinner = document.getElementById('homepageSpinner');
+    
+        if (!(btn && img && statusEl && attrsEl && spinner)) return;
+    
         btn.addEventListener('click', async () => {
           btn.disabled = true;
           statusEl.textContent = 'Generating outfit...';
+    
+          // show spinner, hide previous image
+          spinner.hidden = false;
+          img.hidden = true;
           img.removeAttribute('src');
           attrsEl.textContent = '';
-
+    
           const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
           try {
             const res = await fetch(base + '/api/outfit/generate');
             if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
             if (!data.imageUrl) throw new Error(data.error || 'No imageUrl returned');
-
+    
+            img.addEventListener('load', () => {
+              spinner.hidden = true;
+              img.hidden = false;
+              statusEl.textContent = 'Outfit generated ✔';
+            }, { once: true });
+    
+            img.addEventListener('error', () => {
+              spinner.hidden = true;
+              statusEl.textContent = 'Image failed to load. Trying to load again.';
+            }, { once: true });
+    
             img.src = data.imageUrl.startsWith('http') ? data.imageUrl : (base + data.imageUrl);
-            statusEl.textContent = 'Outfit generated ✔';
+    
             if (data.attributes) {
               attrsEl.textContent = JSON.stringify(data.attributes, null, 2);
             }
           } catch (e) {
             console.error(e);
+            spinner.hidden = true;
             statusEl.textContent = 'Something went wrong. Please try again.';
           } finally {
             btn.disabled = false;

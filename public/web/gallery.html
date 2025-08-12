@@ -112,7 +112,8 @@
         </div>
         <div class="generator-card__result">
             <figure class="outfit-preview">
-                <img id="outfit" alt="Generated outfit" />
+                <div id="outfitpageSpinner" class="spinner" hidden aria-live="polite" aria-busy="true" aria-label="Generating outfit"></div>
+                <img id="outfit" alt="Generated outfit" hidden />
                 <figcaption id="outfitpageStatus" aria-live="polite" class="prose" style="text-align:center;color:var(--ink-2)"></figcaption>
                 <div id="outfitMeta" class="prose"></div>
             </figure>
@@ -125,32 +126,57 @@
           const btn = document.getElementById('makeOutfit');
           const img = document.getElementById('outfit');
           const statusEl = document.getElementById('outfitpageStatus');
+          const spinner = document.getElementById('outfitpageSpinner');   
       
-          if (!(btn && img && statusEl)) return;
+          if (!(btn && img && statusEl && spinner)) return;
       
           btn.addEventListener('click', async () => {
             btn.disabled = true;
             statusEl.textContent = 'Generating outfit...';
+      
+            // Hide placeholder + reset src so the next load event will fire
+            spinner.hidden = false;
+            img.hidden = true;
             img.removeAttribute('src');
       
             const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+      
             try {
               const res = await fetch(base + '/api/outfit/generate');
               if (!res.ok) throw new Error('HTTP ' + res.status);
               const data = await res.json();
               if (!data.imageUrl) throw new Error(data.error || 'No imageUrl returned');
       
-              img.src = data.imageUrl.startsWith('http') ? data.imageUrl : (base + data.imageUrl);
-              statusEl.textContent = 'Outfit generated ✔';
+              // Show only after the image is fully loaded
+              img.addEventListener(
+                'load',
+                () => {
+                  spinner.hidden = true;
+                  img.hidden = false;
+                  statusEl.textContent = 'Outfit generated ✔';
+                },
+                { once: true }
+              );
+      
+              img.addEventListener(
+                'error',
+                () => {
+                  statusEl.textContent = 'Image failed to load. Trying to load again.';
+                },
+                { once: true }
+              );
+      
+              img.src = data.imageUrl.startsWith('http') ? data.imageUrl : base + data.imageUrl;
             } catch (e) {
               console.error(e);
+              spinner.hidden = true;
               statusEl.textContent = 'Something went wrong. Please try again.';
             } finally {
               btn.disabled = false;
             }
           });
         })();
-    </script> 
+    </script>
   </section>
 
   <!-- History: previously generated outfits -->
