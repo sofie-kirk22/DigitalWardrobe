@@ -204,5 +204,7 @@ async function uploadFiles(fileInput: HTMLInputElement, uploadUrl: string, field
       alert(data.error || 'Failed to make outfit');
     }
   });
+
+  
   
   

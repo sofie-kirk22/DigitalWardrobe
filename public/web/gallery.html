@@ -111,11 +111,46 @@
           <button id="makeOutfit" class="btn btn-primary">Generate Outfit</button>
         </div>
         <div class="generator-card__result">
-          <img id="outfit" alt="Generated outfit" />
-          <div id="outfitMeta" class="prose"></div>
+            <figure class="outfit-preview">
+                <img id="outfit" alt="Generated outfit" />
+                <figcaption id="outfitpageStatus" aria-live="polite" class="prose" style="text-align:center;color:var(--ink-2)"></figcaption>
+                <div id="outfitMeta" class="prose"></div>
+            </figure>
         </div>
       </article>
     </div>
+
+    <script>
+        (function () {
+          const btn = document.getElementById('makeOutfit');
+          const img = document.getElementById('outfit');
+          const statusEl = document.getElementById('outfitpageStatus');
+      
+          if (!(btn && img && statusEl)) return;
+      
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            statusEl.textContent = 'Generating outfit...';
+            img.removeAttribute('src');
+      
+            const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+            try {
+              const res = await fetch(base + '/api/outfit/generate');
+              if (!res.ok) throw new Error('HTTP ' + res.status);
+              const data = await res.json();
+              if (!data.imageUrl) throw new Error(data.error || 'No imageUrl returned');
+      
+              img.src = data.imageUrl.startsWith('http') ? data.imageUrl : (base + data.imageUrl);
+              statusEl.textContent = 'Outfit generated ✔';
+            } catch (e) {
+              console.error(e);
+              statusEl.textContent = 'Something went wrong. Please try again.';
+            } finally {
+              btn.disabled = false;
+            }
+          });
+        })();
+    </script> 
   </section>
 <script src="../src/gallery.js" defer></script>
 </body>
