@@ -34,7 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _a;
 var _this = this;
 // Fetch top images from server and display in gallery
 document.addEventListener('DOMContentLoaded', function () {
@@ -244,28 +243,145 @@ function uploadFiles(fileInput, uploadUrl, fieldName, category) {
         });
     });
 }
-//Display image from chatGPT
-(_a = document.getElementById('makeOutfit')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
-    var res, data, outfitElement;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, fetch('http://localhost:3000/api/outfit/generate')];
-            case 1:
-                res = _a.sent();
-                return [4 /*yield*/, res.json()];
-            case 2:
-                data = _a.sent();
-                if (data.imageUrl) {
-                    outfitElement = document.getElementById('outfit');
-                    if (outfitElement) {
-                        outfitElement.src = data.imageUrl;
+// --- Outfit generator: spinner + hide until loaded + set image + log attributes ---
+(function () {
+    var btn = document.getElementById('makeOutfit');
+    var img = document.getElementById('outfit');
+    var statusEl = document.getElementById('outfitpageStatus');
+    var spinner = document.getElementById('outfitpageSpinner');
+    // Optional: if you want to also prepend the new image to the history grid
+    var historyGrid = document.getElementById('historyGrid');
+    var historyEmpty = document.getElementById('historyEmpty');
+    if (!(btn && img && statusEl && spinner))
+        return;
+    // Prevent duplicate listeners if this file is accidentally included twice
+    if (btn.dataset.bound === '1')
+        return;
+    btn.dataset.bound = '1';
+    var base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+    btn.addEventListener('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var res, data, outfitElement, rawUrl, bustUrl_1, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    btn.disabled = true;
+                    statusEl.textContent = 'Generating outfit...';
+                    // Hide previous image and show spinner
+                    spinner.hidden = false;
+                    img.hidden = true;
+                    img.removeAttribute('src'); // ensure next 'load' fires
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, 5, 6]);
+                    return [4 /*yield*/, fetch('http://localhost:3000/api/outfit/generate')];
+                case 2:
+                    res = _a.sent();
+                    if (!res.ok)
+                        throw new Error("HTTP ".concat(res.status));
+                    return [4 /*yield*/, res.json()];
+                case 3:
+                    data = _a.sent();
+                    if (!data.imageUrl)
+                        throw new Error(data.error || 'No imageUrl returned');
+                    if (data.imageUrl) {
+                        outfitElement = document.getElementById('outfit');
+                        if (outfitElement) {
+                            outfitElement.src = data.imageUrl;
+                        }
+                        console.log('Attributes used:', data.attributes);
                     }
-                    console.log('Attributes used:', data.attributes);
+                    else {
+                        alert(data.error || 'Failed to make outfit');
+                    }
+                    rawUrl = data.imageUrl.startsWith('http') ? data.imageUrl : "".concat(base).concat(data.imageUrl);
+                    bustUrl_1 = rawUrl + (rawUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
+                    // Reveal only after the image has fully loaded
+                    img.addEventListener('load', function () {
+                        spinner.hidden = true;
+                        img.hidden = false;
+                        statusEl.textContent = 'Outfit generated ✔';
+                        // Optional: prepend to history grid
+                        if (historyGrid) {
+                            var thumb = new Image();
+                            thumb.alt = 'Previously generated outfit';
+                            thumb.src = bustUrl_1;
+                            if (historyEmpty)
+                                historyEmpty.style.display = 'none';
+                            historyGrid.prepend(thumb);
+                        }
+                    }, { once: true });
+                    img.addEventListener('error', function () {
+                        spinner.hidden = true;
+                        statusEl.textContent = 'Image failed to load. Please try again.';
+                    }, { once: true });
+                    //preserves the previous inline functionality
+                    img.src = bustUrl_1;
+                    return [3 /*break*/, 6];
+                case 4:
+                    e_1 = _a.sent();
+                    console.error(e_1);
+                    spinner.hidden = true;
+                    statusEl.textContent = 'Something went wrong. Please try again.';
+                    return [3 /*break*/, 6];
+                case 5:
+                    btn.disabled = false;
+                    return [7 /*endfinally*/];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
+})();
+(function () {
+    var base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+    var historyGrid = document.getElementById('historyGrid');
+    var historyEmpty = document.getElementById('historyEmpty');
+    if (!(historyGrid && historyEmpty))
+        return;
+    function loadHistory() {
+        return __awaiter(this, void 0, void 0, function () {
+            var res, data, items, frag, _i, items_1, it, url, img, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, fetch("".concat(base, "/api/generated"))];
+                    case 1:
+                        res = _a.sent();
+                        if (!res.ok)
+                            throw new Error("HTTP ".concat(res.status));
+                        if (!historyGrid || !historyEmpty)
+                            return [2 /*return*/];
+                        return [4 /*yield*/, res.json()];
+                    case 2:
+                        data = (_a.sent());
+                        items = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
+                        historyGrid.innerHTML = '';
+                        if (!items.length) {
+                            historyEmpty.style.display = 'block';
+                            return [2 /*return*/];
+                        }
+                        historyEmpty.style.display = 'none';
+                        frag = document.createDocumentFragment();
+                        for (_i = 0, items_1 = items; _i < items_1.length; _i++) {
+                            it = items_1[_i];
+                            url = it.url.startsWith('http') ? it.url : "".concat(base).concat(it.url);
+                            img = new Image();
+                            img.alt = 'Previously generated outfit';
+                            img.src = url;
+                            frag.appendChild(img);
+                        }
+                        historyGrid.appendChild(frag);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        console.error('Failed to load history:', e_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
-                else {
-                    alert(data.error || 'Failed to make outfit');
-                }
-                return [2 /*return*/];
-        }
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        void loadHistory();
     });
-}); });
+})();

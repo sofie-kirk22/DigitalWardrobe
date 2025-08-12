@@ -190,20 +190,146 @@ async function uploadFiles(fileInput: HTMLInputElement, uploadUrl: string, field
     }
   }
 
-  //Display image from chatGPT
-  document.getElementById('makeOutfit')?.addEventListener('click', async () => {
-    const res = await fetch('http://localhost:3000/api/outfit/generate');
-    const data = await res.json();
-    if (data.imageUrl) {
-      const outfitElement = document.getElementById('outfit') as HTMLImageElement | null;
-      if (outfitElement) {
-        outfitElement.src = data.imageUrl;
+// --- Outfit generator: spinner + hide until loaded + set image + log attributes ---
+(() => {
+    const btn = document.getElementById('makeOutfit') as HTMLButtonElement | null;
+    const img = document.getElementById('outfit') as HTMLImageElement | null;
+    const statusEl = document.getElementById('outfitpageStatus') as HTMLElement | null;
+    const spinner = document.getElementById('outfitpageSpinner') as HTMLElement | null;
+  
+    // Optional: if you want to also prepend the new image to the history grid
+    const historyGrid = document.getElementById('historyGrid') as HTMLDivElement | null;
+    const historyEmpty = document.getElementById('historyEmpty') as HTMLElement | null;
+  
+    if (!(btn && img && statusEl && spinner)) return;
+  
+    // Prevent duplicate listeners if this file is accidentally included twice
+    if (btn.dataset.bound === '1') return;
+    btn.dataset.bound = '1';
+
+  
+    const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+  
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      statusEl.textContent = 'Generating outfit...';
+  
+      // Hide previous image and show spinner
+      spinner.hidden = false;
+      img.hidden = true;
+      img.removeAttribute('src'); // ensure next 'load' fires
+  
+      try {
+        const res = await fetch('http://localhost:3000/api/outfit/generate');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  
+        const data = await res.json();
+        if (!data.imageUrl) throw new Error(data.error || 'No imageUrl returned');
+        
+        if (data.imageUrl) {
+            const outfitElement = document.getElementById('outfit') as HTMLImageElement | null;
+            if (outfitElement) {
+              outfitElement.src = data.imageUrl;
+            }
+            console.log('Attributes used:', data.attributes);
+          } else {
+            alert(data.error || 'Failed to make outfit');
+        }
+        // Build absolute URL and add cache-buster to avoid stale images
+        const rawUrl = data.imageUrl.startsWith('http') ? data.imageUrl : `${base}${data.imageUrl}`;
+        const bustUrl = rawUrl + (rawUrl.includes('?') ? '&' : '?') + 'v=' + Date.now();
+  
+        // Reveal only after the image has fully loaded
+        img.addEventListener(
+          'load',
+          () => {
+            spinner.hidden = true;
+            img.hidden = false;
+            statusEl.textContent = 'Outfit generated ✔';
+  
+            // Optional: prepend to history grid
+            if (historyGrid) {
+              const thumb = new Image();
+              thumb.alt = 'Previously generated outfit';
+              thumb.src = bustUrl;
+              if (historyEmpty) historyEmpty.style.display = 'none';
+              historyGrid.prepend(thumb);
+            }
+          },
+          { once: true }
+        );
+  
+        img.addEventListener(
+          'error',
+          () => {
+            spinner.hidden = true;
+            statusEl.textContent = 'Image failed to load. Please try again.';
+          },
+          { once: true }
+        );
+  
+        //preserves the previous inline functionality
+        img.src = bustUrl;
+        //console.log('Attributes used:', data.attributes);
+  
+      } catch (e) {
+        console.error(e);
+        spinner.hidden = true;
+        statusEl.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        btn.disabled = false;
       }
-      console.log('Attributes used:', data.attributes);
-    } else {
-      alert(data.error || 'Failed to make outfit');
+    });
+  })();
+
+  // --- Previously Generated Outfits (TypeScript) ---
+type GeneratedItem = { filename: string; url: string };
+type GeneratedList =
+  | GeneratedItem[]
+  | { items: GeneratedItem[]; total?: number; offset?: number; limit?: number; hasMore?: boolean };
+
+(() => {
+  const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+
+  const historyGrid = document.getElementById('historyGrid') as HTMLDivElement | null;
+  const historyEmpty = document.getElementById('historyEmpty') as HTMLElement | null;
+  if (!(historyGrid && historyEmpty)) return;
+
+  async function loadHistory(): Promise<void> {
+    try {
+      const res = await fetch(`${base}/api/generated`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!historyGrid || !historyEmpty) return;
+
+      const data = (await res.json()) as GeneratedList;
+      const items = Array.isArray(data) ? data : Array.isArray(data.items) ? data.items : [];
+
+      historyGrid.innerHTML = '';
+      if (!items.length) {
+        historyEmpty.style.display = 'block';
+        return;
+      }
+      historyEmpty.style.display = 'none';
+
+      const frag = document.createDocumentFragment();
+      for (const it of items) {
+        const url = it.url.startsWith('http') ? it.url : `${base}${it.url}`;
+        const img = new Image();
+        img.alt = 'Previously generated outfit';
+        img.src = url;
+        frag.appendChild(img);
+      }
+      historyGrid.appendChild(frag);
+    } catch (e) {
+      console.error('Failed to load history:', e);
     }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    void loadHistory();
   });
+})();
+  
 
   
   

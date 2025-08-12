@@ -168,7 +168,7 @@ Avoid logos or brand marks. Camera: mid-shot, straight-on, soft shadows.
     const filename = `outfit-${Date.now()}.png`;
     const outPath = path.join(outDir, filename);
     fs.writeFileSync(outPath, buf);
-    return `../../generated/${filename}`;
+    return `/generated/${filename}`;
 }
 
 // make generated images web-accessible
