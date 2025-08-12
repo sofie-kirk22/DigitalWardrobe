@@ -211,4 +211,37 @@ app.get("/api/outfit/generate", async (req, res) => {
   }
 });
 
+// History endpoint: get all previously generated outfits
+const generatedRoot = path.join(__dirname, 'generated');
+fs.mkdirSync(generatedRoot, { recursive: true }); // ensure it exists
+app.use('/generated', express.static(generatedRoot));
+
+// List previously generated images (newest first)
+app.get('/api/generated', async (req, res) => {
+  try {
+    const files = (await fs.promises.readdir(generatedRoot))
+      .filter(f => /\.(png|jpe?g|webp)$/i.test(f));
+
+    // sort by mtime desc
+    const withStats = await Promise.all(
+      files.map(async (f) => {
+        const stat = await fs.promises.stat(path.join(generatedRoot, f));
+        return { filename: f, mtime: stat.mtimeMs };
+      })
+    );
+    withStats.sort((a, b) => b.mtime - a.mtime);
+
+    // return URLs the browser can load
+    const items = withStats.map(({ filename }) => ({
+      filename,
+      url: `/generated/${encodeURIComponent(filename)}`
+    }));
+
+    res.json(items);
+  } catch (e) {
+    console.error('Failed to list generated images:', e);
+    res.status(500).json({ error: 'Could not list generated images' });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

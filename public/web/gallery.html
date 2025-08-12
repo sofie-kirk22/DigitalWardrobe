@@ -152,6 +152,74 @@
         })();
     </script> 
   </section>
+
+  <!-- History: previously generated outfits -->
+<section class="section" id="history">
+    <div class="container">
+      <h2>Previously Generated Outfits</h2>
+      <div id="historyGrid" class="gallery-grid" aria-live="polite"></div>
+      <p id="historyEmpty" class="prose" style="color:var(--ink-2); display:none;">
+        No outfits yet — generate your first one above!
+      </p>
+    </div>
+  </section>
+  <script>
+    (function(){
+      const historyGrid = document.getElementById('historyGrid');
+      const historyEmpty = document.getElementById('historyEmpty');
+      const base = location.origin.startsWith('file:') ? 'http://localhost:3000' : '';
+  
+      async function loadHistory() {
+        try {
+          const res = await fetch(base + '/api/generated');
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const items = await res.json();
+          historyGrid.innerHTML = '';
+  
+          if (!items.length) {
+            historyEmpty.style.display = 'block';
+            return;
+          }
+          historyEmpty.style.display = 'none';
+  
+          items.forEach(it => {
+            const img = document.createElement('img');
+            img.src = it.url.startsWith('http') ? it.url : (base + it.url);
+            img.alt = 'Previously generated outfit';
+            historyGrid.appendChild(img);
+          });
+        } catch (e) {
+          console.error('Failed to load history:', e);
+        }
+      }
+  
+      // Load on page open
+      document.addEventListener('DOMContentLoaded', loadHistory);
+  
+      // Also append the newly generated image when the user clicks Generate
+      const btn = document.getElementById('makeOutfit');
+      const statusEl = document.getElementById('outfitpageStatus');
+      const img = document.getElementById('outfit');
+  
+      if (btn && img && statusEl) {
+        btn.addEventListener('click', async () => {
+          // We reuse your existing generate code; after success we prepend the new image:
+          const mutationObserver = new MutationObserver(() => {
+            if (img.src) {
+              // Prepend newest
+              const thumb = document.createElement('img');
+              thumb.src = img.src;
+              thumb.alt = 'Previously generated outfit';
+              historyEmpty.style.display = 'none';
+              historyGrid.prepend(thumb);
+              mutationObserver.disconnect();
+            }
+          });
+          mutationObserver.observe(img, { attributes: true, attributeFilter: ['src'] });
+        });
+      }
+    })();
+  </script>
 <script src="../src/gallery.js" defer></script>
 </body>
 </html>
